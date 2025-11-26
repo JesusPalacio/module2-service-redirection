@@ -15,8 +15,9 @@ Este módulo es responsable de:
 
 - **AWS Lambda**: Función serverless para procesar redirecciones
 - **API Gateway**: Endpoint REST regional
-- **DynamoDB**: Base de datos compartida `sortener-urls`
+- **DynamoDB**: Base de datos compartida `sortener-urls` (creada por Módulo 1)
 - **CloudWatch**: Logs con retención de 7 días
+- **IAM**: Roles y políticas con permisos mínimos necesarios
 
 ## 🚀 Tecnologías
 
@@ -36,10 +37,13 @@ Este módulo es responsable de:
 │   ├── package.json
 │   └── package-lock.json
 ├── terraform/
-│   ├── main.tf                 # Recursos principales
+│   ├── data.tf                 # Data sources (región, account)
+│   ├── iam.tf                  # Roles y políticas IAM
+│   ├── lambda.tf               # Lambda y CloudWatch logs
+│   ├── api_gateway.tf          # API Gateway completo
+│   ├── provider.tf             # Configuración AWS y backend S3
 │   ├── variables.tf            # Variables de configuración
 │   ├── outputs.tf              # Outputs del módulo
-│   ├── provider.tf             # Configuración AWS y backend
 │   └── terraform.tfvars        # Valores de variables
 ├── .gitignore
 └── README.md
