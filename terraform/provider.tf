@@ -7,10 +7,10 @@ terraform {
   }
 
   backend "s3" {
-  bucket = "redirect-module-tfstate"
-  key    = "terraform.tfstate"
-  region = "us-west-1"
-}
+    bucket = "redirect-module-tfstate"
+    key    = "terraform.tfstate"
+    region = "us-west-1"
+  }
 
 }
 

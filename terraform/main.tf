@@ -13,13 +13,13 @@ resource "aws_iam_role" "lambda_role" {
   })
 
   tags = {
-    Module = "Redirect Service"
+    Module    = "Redirect Service"
     ManagedBy = "Terraform"
   }
 }
 
 resource "aws_iam_policy" "lambda_policy" {
-  name = "${var.lambda_name}-policy"
+  name        = "${var.lambda_name}-policy"
   description = "Permisos para Lambda de redirección"
 
   policy = jsonencode({
@@ -79,7 +79,7 @@ resource "aws_lambda_function" "redirect_lambda" {
   }
 
   tags = {
-    Module = "Redirect Service"
+    Module    = "Redirect Service"
     ManagedBy = "Terraform"
   }
 
