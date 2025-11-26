@@ -1,29 +1,32 @@
-Módulo 2: Servicio de Redirección
+# Módulo 2: Servicio de Redirección
+
 Servicio de redirección para acortador de URLs. Recibe un código corto y redirige al usuario al URL original almacenado en DynamoDB.
 
-📋 Descripción
+## 📋 Descripción
+
 Este módulo es responsable de:
 
-Recibir códigos cortos vía GET /{codigo}
-Validar existencia en DynamoDB
-Redireccionar con código HTTP 302
-Registrar estadísticas de visitas
+- Recibir códigos cortos vía GET `/{codigo}`
+- Validar existencia en DynamoDB
+- Redireccionar con código HTTP 302
+- Registrar estadísticas de visitas
 
-🏗️ Arquitectura
+## 🏗️ Arquitectura
 
-AWS Lambda: Función serverless para procesar redirecciones
-API Gateway: Endpoint REST regional
-DynamoDB: Base de datos compartida sortener-urls
-CloudWatch: Logs con retención de 7 días
+- **AWS Lambda**: Función serverless para procesar redirecciones
+- **API Gateway**: Endpoint REST regional
+- **DynamoDB**: Base de datos compartida `sortener-urls`
+- **CloudWatch**: Logs con retención de 7 días
 
-🚀 Tecnologías
+## 🚀 Tecnologías
 
-Node.js 18.x
-Terraform 1.6.0
-AWS SDK v2
-GitHub Actions
+- Node.js 18.x
+- Terraform 1.6.0
+- AWS SDK v2
+- GitHub Actions
 
-📁 Estructura del Proyecto
+## 📁 Estructura del Proyecto
+```
 .
 ├── .github/
 │   └── workflows/
@@ -40,21 +43,26 @@ GitHub Actions
 │   └── terraform.tfvars        # Valores de variables
 ├── .gitignore
 └── README.md
+```
 
-⚙️ Configuración
-Pre-requisitos
+## ⚙️ Configuración
 
-Cuenta AWS configurada
-Terraform 
-Node.js 
-Tabla DynamoDB sortener-urls ya creada por modulo 1
+### Pre-requisitos
 
-Variables de Terraform
+- Cuenta AWS configurada
+- Terraform >= 1.6.0
+- Node.js >= 18.x
+- Tabla DynamoDB `sortener-urls` ya creada por módulo 1
+
+### Variables de Terraform
+```hcl
 table_name  = "sortener-urls"
 lambda_name = "redirect-service"
+```
 
-Secretos de GitHub (CI/CD)
+### Secretos de GitHub (CI/CD)
+
 Configurar en el repositorio:
 
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
