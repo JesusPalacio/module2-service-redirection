@@ -1,8 +1,8 @@
-name: Deploy Module 2 (GET Redirect)
+name: Deploy Redirect Module
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -16,14 +16,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
-      - name: Install dependencies
+      - name: Install Lambda dependencies
         run: |
           cd lambda
           npm ci --production
 
-      - name: Create Lambda package
+      - name: Create Lambda deployment package
         run: |
           cd lambda
           zip -r ../lambda.zip .
@@ -37,12 +37,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
+
       - name: Upload Lambda to AWS
         run: |
           aws lambda update-function-code \
-            --function-name redirectLambda \
+            --function-name redirect-service \
             --zip-file fileb://lambda.zip
 
-      - name: Output API URL
-        run: |
-          echo "Redirect Lambda deployed"
+      - name: Finished
+        run: echo "Lambda GET actualizada correctamente."
