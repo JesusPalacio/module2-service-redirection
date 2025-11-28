@@ -57,11 +57,3 @@ resource "aws_api_gateway_deployment" "deployment" {
     aws_api_gateway_integration.lambda_integration,
   ]
 }
-
-
-resource "aws_api_gateway_stage" "prod" {
-  deployment_id = aws_api_gateway_deployment.deployment.id
-  rest_api_id   = data.aws_api_gateway_rest_api.existing.id
-  stage_name    = "prod"
-  
-}
