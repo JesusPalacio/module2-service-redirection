@@ -1,8 +1,8 @@
-name: Deploy Redirect Module
+name: Deploy Module 2 (GET Redirect)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -16,14 +16,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
-      - name: Install Lambda dependencies
+      - name: Install dependencies
         run: |
           cd lambda
           npm ci --production
 
-      - name: Create Lambda deployment package
+      - name: Create Lambda package
         run: |
           cd lambda
           zip -r ../lambda.zip .
@@ -37,25 +37,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.6.0
-
-      - name: Terraform Format Check
-        run: cd terraform && terraform fmt -check
-
-      - name: Terraform Init
-        run: cd terraform && terraform init
-
-      - name: Terraform Validate
-        run: cd terraform && terraform validate
-
-      - name: Terraform Plan
-        run: cd terraform && terraform plan -out=tfplan
-
-      - name: Terraform Apply
-        run: cd terraform && terraform apply -auto-approve tfplan
+      - name: Upload Lambda to AWS
+        run: |
+          aws lambda update-function-code \
+            --function-name redirectLambda \
+            --zip-file fileb://lambda2.zip
 
       - name: Output API URL
-        run: cd terraform && terraform output api_url
+        run: |
+          echo "Redirect Lambda deployed"
