@@ -5,7 +5,7 @@ output "api_url" {
 
 output "redirect_endpoint" {
   description = "Endpoint completo para redirección"
-  value       = "${aws_api_gateway_stage.prod.invoke_url}/{codigo}"
+  value       = "${aws_api_gateway_stage.prod.invoke_url}/{code}"
 }
 
 output "lambda_function_name" {

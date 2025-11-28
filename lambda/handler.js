@@ -4,7 +4,7 @@ const TABLE_NAME = process.env.TABLE_NAME;
 
 module.exports.handler = async (event) => {
   try {
-    const code = event.pathParameters && event.pathParameters.codigo;
+    const code = event.pathParameters && event.pathParameters.code;
     
     if (!code) {
       return {
@@ -13,7 +13,7 @@ module.exports.handler = async (event) => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*"
         },
-        body: JSON.stringify({ message: "Falta parámetro 'codigo'" })
+        body: JSON.stringify({ message: "Falta parámetro 'code'" })
       };
     }
 
