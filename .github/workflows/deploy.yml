@@ -41,7 +41,7 @@ jobs:
         run: |
           aws lambda update-function-code \
             --function-name redirectLambda \
-            --zip-file fileb://lambda2.zip
+            --zip-file fileb://lambda.zip
 
       - name: Output API URL
         run: |
