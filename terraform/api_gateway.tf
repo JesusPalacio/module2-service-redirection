@@ -1,5 +1,5 @@
 data "aws_api_gateway_rest_api" "existing" {
-  name = "redirect-service-api" 
+  name = "shortener-api" 
 }
 
 resource "aws_api_gateway_resource" "redirect_path" {
