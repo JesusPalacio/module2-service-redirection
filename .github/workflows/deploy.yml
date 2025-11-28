@@ -12,56 +12,58 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
+      
       - name: Install Lambda dependencies
         run: |
           cd lambda
           npm ci --production
-
+      
       - name: Create Lambda deployment package
         run: |
           cd lambda
           zip -r ../lambda.zip .
           cd ..
           ls -lh lambda.zip
-
+      
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
-
+      
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
-
+      
       - name: Terraform Init
         run: |
           cd terraform
           terraform init
-
+      
       - name: Terraform Plan
         run: |
           cd terraform
-          terraform plan \
-            -var="api_id=${{ secrets.API_GATEWAY_ID }}" \
-            -var="root_id=${{ secrets.API_GATEWAY_ROOT_ID }}" \
-            -var="api_execution_arn=${{ secrets.API_GATEWAY_EXECUTION_ARN }}"
-
+          terraform plan
+      
       - name: Terraform Apply
         run: |
           cd terraform
-          terraform apply -auto-approve \
-            -var="api_id=${{ secrets.API_GATEWAY_ID }}" \
-            -var="root_id=${{ secrets.API_GATEWAY_ROOT_ID }}" \
-            -var="api_execution_arn=${{ secrets.API_GATEWAY_EXECUTION_ARN }}"
-
+          terraform apply -auto-approve
+      
+      - name: Get API URL
+        id: get_url
+        run: |
+          cd terraform
+          echo "api_url=$(terraform output -raw api_url)" >> $GITHUB_OUTPUT
+      
       - name: Deployment Complete
-        run: echo "✅ Redirect module deployed successfully!"
+        run: |
+          echo "✅ Redirect module deployed successfully!"
+          echo "🌐 API URL: ${{ steps.get_url.outputs.api_url }}"
