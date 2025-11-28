@@ -8,6 +8,11 @@ output "lambda_function_arn" {
   value       = aws_lambda_function.redirect_lambda.arn
 }
 
+output "api_endpoint" {
+  value       = "${aws_api_gateway_resource.redirect_path.path_part}"
+  description = "URL completa del endpoint GET"
+}
+
 output "api_id" {
   value       = data.aws_api_gateway_rest_api.existing.id
   description = "ID del API Gateway"
