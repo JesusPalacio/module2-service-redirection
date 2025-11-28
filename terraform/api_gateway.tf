@@ -1,18 +1,3 @@
-variable "api_id" {
-  type        = string
-  description = "ID de la API del módulo 1"
-}
-
-variable "root_id" {
-  type        = string
-  description = "Root resource ID de la API del módulo 1"
-}
-
-variable "api_execution_arn" {
-  type        = string
-  description = "Execution ARN de la API del módulo 1"
-}
-
 resource "aws_api_gateway_resource" "redirect_path" {
   rest_api_id = var.api_id
   parent_id   = var.root_id
