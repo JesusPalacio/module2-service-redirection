@@ -26,23 +26,5 @@ resource "aws_lambda_permission" "allow_api" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.redirect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${var.api_execution_arn}/prod/GET/*"
-}
-
-
-
-resource "aws_api_gateway_deployment" "redirect_deployment" {
-  rest_api_id = var.api_id
-  stage_name = "prod"
-
-
-  triggers = {
-    redeploy = timestamp()
-  }
-
-
-  depends_on = [ 
-    aws_api_gateway_method.get_method,
-    aws_api_gateway_integration.lambda_integration
-   ]
+  source_arn = "${var.api_execution_arn}/*/*"
 }
