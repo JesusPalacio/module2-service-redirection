@@ -32,7 +32,7 @@ resource "aws_lambda_permission" "allow_api" {
   function_name = aws_lambda_function.redirect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   
-  source_arn = "${data.aws_api_gateway_rest_api.existing.execution_arn}/*/GET/*"
+  source_arn = "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${data.aws_api_gateway_rest_api.existing.id}/*/GET/*"
 }
 
 
