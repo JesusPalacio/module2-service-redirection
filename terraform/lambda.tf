@@ -35,11 +35,3 @@ resource "aws_lambda_function" "redirect_lambda" {
     aws_iam_role_policy_attachment.attach
   ]
 }
-
-resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.redirect_lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.api.execution_arn}/*/*"
-}
