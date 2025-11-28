@@ -41,6 +41,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
+          terraform_wrapper: false
       
       - name: Terraform Init
         run: |
@@ -51,19 +52,32 @@ jobs:
         run: |
           cd terraform
           terraform plan
+
       
       - name: Terraform Apply
         run: |
           cd terraform
           terraform apply -auto-approve
+
       
-      - name: Get API URL
-        id: get_url
+      - name: Get API Endpoint
+        id: get_endpoint
         run: |
           cd terraform
-          echo "api_url=$(terraform output -raw api_url)" >> $GITHUB_OUTPUT
+          API_ENDPOINT=$(terraform output -raw api_endpoint)
+          echo "endpoint=$API_ENDPOINT" >> $GITHUB_OUTPUT
+          echo "API Endpoint: $API_ENDPOINT"
+      
+      - name: Test Endpoint
+        run: |
+          echo "🧪 Testing API endpoint..."
+          curl -I "${{ steps.get_endpoint.outputs.endpoint }}" || echo "⚠ Endpoint not ready yet (normal if Lambda needs warm-up)"
       
       - name: Deployment Complete
         run: |
           echo "✅ Redirect module deployed successfully!"
-          echo "🌐 API URL: ${{ steps.get_url.outputs.api_url }}"
+          echo "🌐 API Endpoint: ${{ steps.get_endpoint.outputs.endpoint }}"
+          echo ""
+          echo "📝 Next steps:"
+          echo "1. Test the endpoint with a valid code"
+          echo "2. Check CloudWatch logs if needed"

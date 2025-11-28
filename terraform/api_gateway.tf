@@ -15,6 +15,7 @@ resource "aws_api_gateway_method" "get_method" {
   authorization = "NONE"
 }
 
+
 resource "aws_api_gateway_integration" "lambda_integration" {
   rest_api_id             = data.aws_api_gateway_rest_api.existing.id
   resource_id             = aws_api_gateway_resource.redirect_path.id
@@ -23,6 +24,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.redirect_lambda.invoke_arn
 }
+
 
 resource "aws_lambda_permission" "allow_api" {
   statement_id  = "AllowAPIGatewayInvoke"
@@ -33,9 +35,11 @@ resource "aws_lambda_permission" "allow_api" {
   source_arn = "${data.aws_api_gateway_rest_api.existing.execution_arn}/*/*"
 }
 
+
+
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = data.aws_api_gateway_rest_api.existing.id
-  
+
   triggers = {
     redeployment = sha1(jsonencode([
       aws_api_gateway_resource.redirect_path.id,
@@ -47,10 +51,17 @@ resource "aws_api_gateway_deployment" "deployment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_api_gateway_method.get_method,
+    aws_api_gateway_integration.lambda_integration,
+  ]
 }
+
 
 resource "aws_api_gateway_stage" "prod" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = data.aws_api_gateway_rest_api.existing.id
   stage_name    = "prod"
+  
 }
