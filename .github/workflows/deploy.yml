@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -37,12 +37,31 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
 
-      - name: Upload Lambda to AWS
+      - name: Terraform Init
         run: |
-          aws lambda update-function-code \
-            --function-name redirect-service \
-            --zip-file fileb://lambda.zip
+          cd terraform
+          terraform init
 
-      - name: Finished
-        run: echo "Lambda GET actualizada correctamente."
+      - name: Terraform Plan
+        run: |
+          cd terraform
+          terraform plan \
+            -var="api_id=${{ secrets.API_GATEWAY_ID }}" \
+            -var="root_id=${{ secrets.API_GATEWAY_ROOT_ID }}" \
+            -var="api_execution_arn=${{ secrets.API_GATEWAY_EXECUTION_ARN }}"
+
+      - name: Terraform Apply
+        run: |
+          cd terraform
+          terraform apply -auto-approve \
+            -var="api_id=${{ secrets.API_GATEWAY_ID }}" \
+            -var="root_id=${{ secrets.API_GATEWAY_ROOT_ID }}" \
+            -var="api_execution_arn=${{ secrets.API_GATEWAY_EXECUTION_ARN }}"
+
+      - name: Deployment Complete
+        run: echo "✅ Redirect module deployed successfully!"
