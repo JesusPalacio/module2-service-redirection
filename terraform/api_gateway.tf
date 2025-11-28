@@ -35,6 +35,12 @@ resource "aws_api_gateway_deployment" "redirect_deployment" {
   rest_api_id = var.api_id
   stage_name = "prod"
 
+
+  triggers = {
+    redeploy = timestamp()
+  }
+
+
   depends_on = [ 
     aws_api_gateway_method.get_method,
     aws_api_gateway_integration.lambda_integration
